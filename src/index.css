@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "./styles/theme.css";
+@import "./styles/global.css";
+@layer components {
+    .input-style {
+      @apply w-full rounded-2xl border border-[#F2DDE5] bg-[#FFFDFD] px-5 py-4 text-base text-[#1A1A1A] outline-none transition duration-300 placeholder:text-[#8B8B8B] focus:border-transparent focus:ring-2 focus:ring-[#D4AF37];
+    }
+  }
