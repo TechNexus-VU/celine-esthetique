@@ -24,9 +24,11 @@ exports.sendLuxuryEmail = async (to, subject, clientName, content, luxuryTip) =>
                 </div>
             `
         };
+
         await transporter.sendMail(mailOptions);
         console.log("✅ Email sent successfully to:", to);
         return true;
+
     } catch (error) {
         console.error("❌ Nodemailer Error:", error.message);
         return false;
