@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-darkText);
+  background-color: var(--color-pageBg);
+}
+
+/* Common admin styles */
+.admin-page {
+  min-height: 100vh;
+  background-color: var(--color-pageBg);
+}
+
+.admin-card {
+  background: var(--color-cardBg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.admin-btn {
+  background: linear-gradient(
+    135deg,
+    var(--color-primaryPink),
+    var(--color-primaryPinkDark)
+  );
+  color: white;
+  border-radius: var(--radius-button);
+  border: none;
+}
+
+.admin-input {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: white;
+  color: var(--color-darkText);
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: var(--color-primaryPink);
+  box-shadow: 0 0 0 3px rgba(216, 90, 150, 0.14);
+}

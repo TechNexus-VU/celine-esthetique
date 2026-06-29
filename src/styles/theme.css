@@ -1,0 +1,40 @@
+@theme {
+  /* BRAND COLORS */
+  --color-primaryPink: #D85A96;
+  --color-primaryPinkDark: #C94887;
+  --color-primaryPinkLight: #FDEAF3;
+  --color-softPink: #FFF7FB;
+
+  --color-gold: #D4AF37;
+
+  /* TEXT */
+  --color-darkText: #1F1F1F;
+  --color-greyText: #7A7A7A;
+  --color-lightText: #9CA3AF;
+
+  /* STATUS */
+  --color-danger: #E03131;
+  --color-success: #2F9E44;
+  --color-warning: #F59F00;
+
+  /* ADMIN UI */
+  --color-pageBg: #FFF7FB;
+  --color-cardBg: #FFFFFF;
+  --color-sidebarBg: #FFFFFF;
+  --color-border: #F3D6E3;
+  --color-hoverBg: #FDEAF3;
+
+  /* SHADOW */
+  --shadow-soft: 0 14px 40px rgba(216, 90, 150, 0.08);
+  --shadow-card: 0 10px 28px rgba(216, 90, 150, 0.10);
+
+  /* RADIUS */
+  --radius-card: 22px;
+  --radius-button: 14px;
+  --radius-pill: 999px;
+
+  /* TYPOGRAPHY */
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Poppins", sans-serif;
+  --font-script: "Great Vibes", cursive;
+}
