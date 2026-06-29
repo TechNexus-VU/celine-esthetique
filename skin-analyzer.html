@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AI Skin Analyzer</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fff;--bg2:#f5f5f4;--bg3:#f0efe8;--tx:#1a1a18;--tx2:#6b6b67;--bd:rgba(0,0,0,.12);--bd2:rgba(0,0,0,.22);--r:8px;--rl:12px;--dbg:#FCEBEB;--dtx:#A32D2D}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1c1a;--bg2:#252522;--bg3:#2e2e2b;--tx:#f0efe8;--tx2:#9a9a94;--bd:rgba(255,255,255,.10);--bd2:rgba(255,255,255,.20);--dbg:#501313;--dtx:#F09595}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--tx);min-height:100vh;padding:2rem 1rem}
+.app{max-width:680px;margin:0 auto}
+h1{font-size:22px;font-weight:500;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.sub{font-size:14px;color:var(--tx2);margin-bottom:1.5rem}
+.tabs{display:flex;border-bottom:.5px solid var(--bd);margin-bottom:1.5rem}
+.tab{padding:8px 16px;font-size:14px;background:none;border:none;cursor:pointer;color:var(--tx2);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit}
+.tab.active{color:var(--tx);font-weight:500;border-bottom-color:var(--tx)}
+.card{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rl);padding:1.25rem;margin-bottom:1rem}
+.card h3{font-size:11px;font-weight:500;color:var(--tx2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.key-setup{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rl);padding:1.25rem;margin-bottom:1.5rem}
+.key-setup h3{font-size:14px;font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.key-setup p{font-size:13px;color:var(--tx2);margin-bottom:12px;line-height:1.5}
+.key-row{display:flex;gap:8px}
+.key-row input{flex:1;padding:8px 12px;border:.5px solid var(--bd2);border-radius:var(--r);background:var(--bg2);color:var(--tx);font-size:14px;font-family:inherit;outline:none}
+.key-row input:focus{border-color:#185FA5}
+.key-saved{display:flex;align-items:center;gap:8px;font-size:13px;color:#085041;background:#E1F5EE;padding:8px 12px;border-radius:var(--r);margin-top:8px}
+.upload-zone{border:1.5px dashed var(--bd2);border-radius:var(--rl);padding:2.5rem 1.5rem;text-align:center;cursor:pointer;background:var(--bg);position:relative;transition:background .15s}
+.upload-zone:hover{background:var(--bg2)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.uicon{font-size:36px;color:var(--tx2);margin-bottom:12px}
+.ulabel{font-size:15px;font-weight:500}
+.usub{font-size:13px;color:var(--tx2);margin-top:4px}
+.preview-wrap{position:relative;border-radius:var(--rl);overflow:hidden;margin-bottom:1rem}
+.preview-wrap img{width:100%;max-height:300px;object-fit:cover;display:block}
+.preview-overlay{position:absolute;top:10px;right:10px}
+.btn{padding:8px 16px;border-radius:var(--r);border:.5px solid var(--bd2);background:var(--bg);color:var(--tx);font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:background .1s}
+.btn:hover{background:var(--bg2)}
+.btn.primary{background:var(--tx);color:var(--bg);border-color:transparent}
+.btn.primary:hover{opacity:.85}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.danger{color:var(--dtx)}
+.btn.sm{padding:6px 12px;font-size:13px}
+.actions{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;font-size:14px;font-weight:500;margin-bottom:8px}
+.skin-dry{background:#EEEDFE;color:#3C3489}
+.skin-oily{background:#E1F5EE;color:#085041}
+.skin-combination{background:#FAECE7;color:#712B13}
+.skin-normal{background:#E6F1FB;color:#0C447C}
+.skin-sensitive{background:#FBEAF0;color:#72243E}
+.conf-bar{height:6px;background:var(--bg2);border-radius:99px;margin-top:10px}
+.conf-fill{height:100%;border-radius:99px;background:var(--tx);transition:width .6s ease}
+.conf-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-top:6px}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{padding:4px 10px;background:var(--bg2);border-radius:var(--r);font-size:12px;color:var(--tx2)}
+.li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:.5px solid var(--bd);font-size:14px;line-height:1.5}
+.li:last-child{border-bottom:none}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--tx2);margin-top:7px;flex-shrink:0}
+.dot.b{background:#185FA5}.dot.p{background:#534AB7}
+.pname{font-weight:500}
+.preason{font-size:12px;color:var(--tx2);margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem}
+.metric{background:var(--bg2);border-radius:var(--r);padding:12px 14px}
+.mlabel{font-size:12px;color:var(--tx2);margin-bottom:4px}
+.mval{font-size:20px;font-weight:500;text-transform:capitalize}
+.loading{text-align:center;padding:2.5rem;color:var(--tx2);font-size:14px}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--bd2);border-top-color:var(--tx);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{background:var(--dbg);color:var(--dtx);border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:8px}
+.hempty{text-align:center;padding:3.5rem 1rem;color:var(--tx2)}
+.hempty i{font-size:36px;display:block;margin-bottom:12px}
+.hitem{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:.75rem;display:flex;gap:14px;align-items:flex-start}
+.hthumb{width:54px;height:54px;border-radius:var(--r);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--tx2);flex-shrink:0}
+.hinfo{flex:1;min-width:0}
+.hdate{font-size:12px;color:var(--tx2)}
+.hnotes{font-size:12px;color:var(--tx2);margin-top:2px}
+.sumtxt{font-size:14px;color:var(--tx2);margin-top:12px;line-height:1.6}
+video{border-radius:var(--rl);background:#000}
+.hhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.hhdr span{font-size:13px;color:var(--tx2)}
+.info-link{font-size:13px;color:#185FA5;text-decoration:none}
+.info-link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1><i class="ti ti-sparkles"></i> Skin Analyzer</h1>
+  <p class="sub">AI-powered skin analysis — free Gemini API, no server needed</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('analyze')" id="tab-analyze">Analyze</button>
+    <button class="tab" onclick="switchTab('history')" id="tab-history">History <span id="hist-count"></span></button>
+  </div>
+
+  <!-- API KEY SETUP -->
+  <div class="key-setup" id="key-setup">
+    <h3><i class="ti ti-key"></i> Gemini API Key</h3>
+    <p>Free key — get yours at <a class="info-link" href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>. <strong>Note:</strong> Free tier may not work in some regions (PK, IN, etc.) — if you get quota errors, try a VPN or enable billing.</p>
+    <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center">
+      <label style="font-size:13px;color:var(--tx2);white-space:nowrap">Model:</label>
+      <select id="model-select" style="flex:1;padding:7px 10px;border:.5px solid var(--bd2);border-radius:var(--r);background:var(--bg2);color:var(--tx);font-size:13px;font-family:inherit">
+        <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite (1000 req/day — fastest)</option>
+        <option value="gemini-2.5-flash">gemini-2.5-flash (250 req/day — smarter)</option>
+        <option value="gemini-2.5-pro">gemini-2.5-pro (100 req/day — best)</option>
+      </select>
+    </div>
+    <div class="key-row">
+      <input type="password" id="api-key-input" placeholder="AIza..." autocomplete="off"/>
+      <button class="btn primary" onclick="saveKey()"><i class="ti ti-check"></i> Save</button>
+    </div>
+    <div id="key-saved-msg" style="display:none" class="key-saved">
+      <i class="ti ti-circle-check"></i> Key saved — ready to analyze
+      <button class="btn sm" style="margin-left:auto" onclick="clearKey()">Change</button>
+    </div>
+  </div>
+
+  <!-- ANALYZE PANE -->
+  <div id="pane-analyze">
+    <div id="upload-section">
+      <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="image/*" onchange="handleFile(event)" onclick="event.stopPropagation()"/>
+        <div class="uicon"><i class="ti ti-camera-selfie"></i></div>
+        <div class="ulabel">Upload a face photo</div>
+        <div class="usub">JPG, PNG, WEBP — clear lighting, neutral expression</div>
+      </div>
+      <div style="margin-top:10px">
+        <button class="btn" style="width:100%;justify-content:center" onclick="openCamera()">
+          <i class="ti ti-camera"></i> Take photo with camera
+        </button>
+      </div>
+    </div>
+
+    <video id="cam-video" style="display:none;width:100%;margin-bottom:1rem" autoplay playsinline></video>
+    <canvas id="cam-canvas" style="display:none"></canvas>
+    <div id="cam-controls" class="actions" style="display:none">
+      <button class="btn primary" onclick="capturePhoto()"><i class="ti ti-camera"></i> Capture</button>
+      <button class="btn" onclick="closeCamera()"><i class="ti ti-x"></i> Cancel</button>
+    </div>
+
+    <div id="preview-section" style="display:none">
+      <div class="preview-wrap">
+        <img id="preview-img" src="" alt="Preview"/>
+        <div class="preview-overlay">
+          <button class="btn danger" onclick="clearPhoto()"><i class="ti ti-refresh"></i> Change</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="analyze-btn" onclick="analyzePhoto()">
+          <i class="ti ti-brain"></i> Analyze skin
+        </button>
+      </div>
+    </div>
+
+    <div id="error-box" class="error" style="display:none">
+      <i class="ti ti-alert-circle"></i><span id="error-text"></span>
+    </div>
+    <div id="loading" class="loading" style="display:none">
+      <span class="spinner"></span><span id="loading-msg">Analyzing your skin...</span>
+    </div>
+    <div id="results"></div>
+  </div>
+
+  <!-- HISTORY PANE -->
+  <div id="pane-history" style="display:none">
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<script>
+// Gemini 2.0 Flash — free tier, vision support, no CORS issues
+const GEMINI_URL = (key, model) => `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+function getModel() { return document.getElementById('model-select')?.value || 'gemini-2.5-flash-lite'; }
+
+let imageBase64 = '';
+let imageMime = 'image/jpeg';
+let camStream = null;
+let history = [];
+
+try { history = JSON.parse(localStorage.getItem('skin_history') || '[]'); } catch(e) {}
+
+function saveHistory() { try { localStorage.setItem('skin_history', JSON.stringify(history)); } catch(e) {} }
+function updateCount() {
+  document.getElementById('hist-count').textContent = history.length > 0 ? `(${history.length})` : '';
+}
+
+// ── Key management ──
+function getKey() { return localStorage.getItem('gemini_key') || ''; }
+
+function saveKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (!val) return;
+  localStorage.setItem('gemini_key', val);
+  showKeySaved();
+}
+
+function clearKey() {
+  localStorage.removeItem('gemini_key');
+  document.getElementById('api-key-input').value = '';
+  document.getElementById('key-saved-msg').style.display = 'none';
+  document.getElementById('api-key-input').closest('.key-row').style.display = 'flex';
+}
+
+function showKeySaved() {
+  document.getElementById('key-saved-msg').style.display = 'flex';
+  document.getElementById('api-key-input').closest('.key-row').style.display = 'none';
+}
+
+function initKey() {
+  const k = getKey();
+  if (k) {
+    document.getElementById('api-key-input').value = k;
+    showKeySaved();
+  }
+}
+
+// ── Tab ──
+function switchTab(t) {
+  ['analyze','history'].forEach(p => {
+    document.getElementById('pane-'+p).style.display = t===p ? '' : 'none';
+    document.getElementById('tab-'+p).className = 'tab'+(t===p ? ' active' : '');
+  });
+  if (t==='history') renderHistory();
+}
+
+// ── Upload / Camera ──
+function handleFile(e) {
+  const file = e.target.files[0]; if (!file) return;
+  imageMime = file.type || 'image/jpeg';
+  const r = new FileReader();
+  r.onload = ev => { imageBase64 = ev.target.result.split(',')[1]; showPreview(ev.target.result); };
+  r.readAsDataURL(file);
+}
+
+function showPreview(src) {
+  document.getElementById('upload-section').style.display = 'none';
+  document.getElementById('preview-section').style.display = '';
+  document.getElementById('preview-img').src = src;
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('error-box').style.display = 'none';
+}
+
+function clearPhoto() {
+  imageBase64 = '';
+  document.getElementById('preview-section').style.display = 'none';
+  document.getElementById('upload-section').style.display = '';
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('error-box').style.display = 'none';
+  document.getElementById('file-input').value = '';
+}
+
+async function openCamera() {
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 1280 } });
+    const v = document.getElementById('cam-video');
+    v.srcObject = camStream; v.style.display = '';
+    document.getElementById('cam-controls').style.display = 'flex';
+    document.getElementById('upload-section').style.display = 'none';
+  } catch(e) { showError('Camera access denied. Upload a photo instead.'); }
+}
+
+function capturePhoto() {
+  const v = document.getElementById('cam-video'), c = document.getElementById('cam-canvas');
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext('2d').drawImage(v, 0, 0);
+  const url = c.toDataURL('image/jpeg', .92);
+  imageBase64 = url.split(',')[1]; imageMime = 'image/jpeg';
+  closeCamera(); showPreview(url);
+}
+
+function closeCamera() {
+  if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+  document.getElementById('cam-video').style.display = 'none';
+  document.getElementById('cam-controls').style.display = 'none';
+  if (!imageBase64) document.getElementById('upload-section').style.display = '';
+}
+
+function showError(msg) {
+  document.getElementById('error-text').textContent = msg;
+  document.getElementById('error-box').style.display = 'flex';
+}
+
+// ── Analyze ──
+async function analyzePhoto() {
+  const key = getKey();
+  if (!key) { showError('Add your Gemini API key above first.'); return; }
+  if (!imageBase64) return;
+
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  document.getElementById('loading').style.display = '';
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('error-box').style.display = 'none';
+
+  const msgs = ['Analyzing skin...', 'Reading features...', 'Building report...'];
+  let mi = 0;
+  const tick = setInterval(() => { mi = (mi+1)%msgs.length; document.getElementById('loading-msg').textContent = msgs[mi]; }, 1200);
+
+  const prompt = `You are a professional dermatologist AI. Analyze this face photo carefully.
+Return ONLY raw valid JSON — no markdown fences, no explanation, no preamble. Schema:
+{
+  "skinType": "dry|oily|combination|normal|sensitive",
+  "confidence": <0.0-1.0>,
+  "concerns": ["concern1","concern2"],
+  "positives": ["positive1","positive2"],
+  "hydrationLevel": "low|medium|high",
+  "poreVisibility": "minimal|moderate|enlarged",
+  "recommendations": [{"product":"product type","reason":"why it helps"}],
+  "routine": {
+    "morning": ["step1","step2","step3","step4"],
+    "evening": ["step1","step2","step3","step4"]
+  },
+  "summary": "2-sentence summary of findings and advice"
+}`;
+
+  try {
+    const res = await fetch(GEMINI_URL(key, getModel()), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: imageMime, data: imageBase64 } },
+            { text: prompt }
+          ]
+        }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 1200 }
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g, '').trim();
+
+    let result;
+    try { result = JSON.parse(clean); }
+    catch(pe) {
+      const match = clean.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error('Could not parse AI response. Try again.');
+      result = JSON.parse(match[0]);
+    }
+
+    result.timestamp = new Date().toISOString();
+    history.unshift(result);
+    saveHistory();
+    updateCount();
+    renderResults(result);
+
+  } catch(e) {
+    showError('Analysis failed: ' + e.message);
+  } finally {
+    clearInterval(tick);
+    document.getElementById('loading').style.display = 'none';
+    btn.disabled = false;
+  }
+}
+
+// ── Render ──
+function skinClass(t) { return ({dry:'skin-dry',oily:'skin-oily',combination:'skin-combination',normal:'skin-normal',sensitive:'skin-sensitive'}[t]||'skin-normal'); }
+function skinIcon(t) { return ({dry:'ti-droplet-off',oily:'ti-droplet',combination:'ti-droplets',normal:'ti-sun',sensitive:'ti-heart'}[t]||'ti-sun'); }
+
+function renderResults(r) {
+  const pct = Math.round((r.confidence||.8)*100);
+  const tc = (r.skinType||'unknown'); const typeCap = tc.charAt(0).toUpperCase()+tc.slice(1);
+  const concerns = (r.concerns||[]).map(c=>`<div class="li"><div class="dot"></div><div>${c}</div></div>`).join('');
+  const positives = (r.positives||[]).map(p=>`<span class="tag">${p}</span>`).join('');
+  const recs = (r.recommendations||[]).map(p=>`<div class="li" style="flex-direction:column;gap:2px;padding:10px 0"><div class="pname">${p.product}</div><div class="preason">${p.reason}</div></div>`).join('');
+  const morning = (r.routine?.morning||[]).map((s,i)=>`<div class="li"><div class="dot b"></div><div><strong>${i+1}.</strong> ${s}</div></div>`).join('');
+  const evening = (r.routine?.evening||[]).map((s,i)=>`<div class="li"><div class="dot p"></div><div><strong>${i+1}.</strong> ${s}</div></div>`).join('');
+
+  document.getElementById('results').innerHTML = `
+    <div class="card">
+      <h3>Skin type</h3>
+      <div class="badge ${skinClass(r.skinType)}"><i class="ti ${skinIcon(r.skinType)}"></i> ${typeCap}</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:${pct}%"></div></div>
+      <div class="conf-labels"><span>Confidence score</span><span>${pct}%</span></div>
+      ${r.summary?`<p class="sumtxt">${r.summary}</p>`:''}
+    </div>
+    <div class="grid2">
+      <div class="metric"><div class="mlabel">Hydration level</div><div class="mval">${r.hydrationLevel||'—'}</div></div>
+      <div class="metric"><div class="mlabel">Pore visibility</div><div class="mval">${r.poreVisibility||'—'}</div></div>
+    </div>
+    ${positives?`<div class="card"><h3>Skin strengths</h3><div class="tag-list">${positives}</div></div>`:''}
+    ${concerns?`<div class="card"><h3>Concerns detected</h3>${concerns}</div>`:''}
+    ${recs?`<div class="card"><h3>Recommended products</h3>${recs}</div>`:''}
+    ${morning?`<div class="card"><h3>Morning routine</h3>${morning}</div>`:''}
+    ${evening?`<div class="card"><h3>Evening routine</h3>${evening}</div>`:''}
+    <div style="margin-top:.5rem">
+      <button class="btn" onclick="switchTab('history')"><i class="ti ti-history"></i> View history</button>
+    </div>`;
+}
+
+// ── History ──
+function renderHistory() {
+  updateCount();
+  const el = document.getElementById('history-list');
+  if (!history.length) {
+    el.innerHTML = `<div class="hempty"><i class="ti ti-history"></i>No analyses yet.<br>Upload a photo to get started.</div>`;
+    return;
+  }
+  el.innerHTML = `
+    <div class="hhdr">
+      <span>${history.length} analysis${history.length!==1?'es':''}</span>
+      <button class="btn danger" onclick="clearHistory()"><i class="ti ti-trash"></i> Clear all</button>
+    </div>
+    ${history.map((h,i) => {
+      const d = new Date(h.timestamp);
+      const ds = d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      const ts = d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+      const conf = Math.round((h.confidence||.8)*100);
+      const tn = h.skinType||'?'; const tc2 = tn.charAt(0).toUpperCase()+tn.slice(1);
+      const notes = (h.concerns||[]).slice(0,2).join(' · ')+(h.concerns?.length>2?' ...':'');
+      return `<div class="hitem">
+        <div class="hthumb"><i class="ti ti-camera-selfie"></i></div>
+        <div class="hinfo">
+          <div class="hdate">${ds} · ${ts}</div>
+          <div style="margin:4px 0"><span class="badge ${skinClass(h.skinType)}" style="padding:2px 10px;font-size:13px;margin:0"><i class="ti ${skinIcon(h.skinType)}"></i> ${tc2}</span></div>
+          <div class="hnotes">${notes}</div>
+          <div class="hnotes">Confidence: ${conf}% · Hydration: ${h.hydrationLevel||'?'}</div>
+        </div>
+        <button class="btn danger" onclick="deleteEntry(${i})" title="Delete"><i class="ti ti-trash"></i></button>
+      </div>`;
+    }).join('')}`;
+}
+
+function deleteEntry(i) { if(!confirm('Delete this analysis?')) return; history.splice(i,1); saveHistory(); renderHistory(); updateCount(); }
+function clearHistory() { if(!confirm('Delete all analyses?')) return; history=[]; saveHistory(); renderHistory(); updateCount(); }
+
+initKey();
+updateCount();
+</script>
+</body>
+</html>

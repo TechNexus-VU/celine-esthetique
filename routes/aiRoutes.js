@@ -19,4 +19,5 @@ router.post('/send-reminder', aiController.sendReminder);
 router.post('/generate-blog', aiController.generateBlog);
 router.post('/generate-promo', aiController.generatePromo);
 router.post('/detect-intent', aiController.detectIntent);
+
 module.exports = router;

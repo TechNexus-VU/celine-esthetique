@@ -1,3 +1,4 @@
+
 const { OpenAI } = require('openai');
 const { db } = require('../config/firebaseConfig');
 const emailService = require('../services/emailService');
@@ -296,4 +297,3 @@ exports.detectIntent = async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-};

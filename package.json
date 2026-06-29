@@ -1,19 +1,28 @@
 {
-  "name": "celine-esthetique-frontend",
+  "name": "celine-esthetique",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
+  "main": "app.js",
+  "type": "commonjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "node app.js",
+    "server:dev": "nodemon app.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
+    "cors": "^2.8.6",
     "date-fns": "^4.4.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
     "firebase": "^12.15.0",
+    "firebase-admin": "^14.0.0",
     "lucide-react": "^1.22.0",
+    "nodemailer": "^9.0.1",
+    "openai": "^6.44.0",
     "react": "^19.2.6",
     "react-big-calendar": "^1.20.0",
     "react-dom": "^19.2.6",
@@ -33,6 +42,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "nodemon": "^3.1.14",
     "tailwindcss": "^4.3.1",
     "vite": "^8.0.12"
   }
