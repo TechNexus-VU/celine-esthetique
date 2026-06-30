@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NailGen AI — Premium AI Nail Art Generator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --surface-color: rgba(22, 24, 30, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary-glow: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa7c11 100%);
+            --accent-purple: #c084fc;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --shadow-lux: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.05) 0%, transparent 40%);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Container & Navigation */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 24px;
+            background: var(--primary-glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-glow);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .badge {
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            font-family: var(--font-display);
+        }
+
+        /* Hero / Generator Section */
+        .hero {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+            background: linear-gradient(180deg, #ffffff 0%, #a3a3a3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+            margin-bottom: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 36px;
+            }
+        }
+
+        /* Glassmorphism Panels */
+        .panel {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-lux);
+            transition: border-color 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        /* Input Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-display);
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        select.form-control {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        select option {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        /* Generate Button */
+        .btn-generate {
+            width: 100%;
+            background: var(--primary-glow);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+
+        .btn-generate:disabled {
+            background: var(--text-secondary);
+            color: var(--bg-color);
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Live Preview Container */
+        .preview-container {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Custom Loader */
+        .loader-wrapper {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            z-index: 5;
+        }
+
+        .spinner {
+            width: 64px;
+            height: 64px;
+            border: 3px solid rgba(212, 175, 55, 0.1);
+            border-top-color: #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 500;
+            color: #d4af37;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            stroke: rgba(212, 175, 55, 0.4);
+            margin-bottom: 8px;
+        }
+
+        /* Gallery Grid */
+        .gallery-section {
+            border-top: 1px solid var(--border-color);
+            padding: 80px 0;
+        }
+
+        .gallery-title {
+            font-family: var(--font-display);
+            font-size: 32px;
+            margin-bottom: 40px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* Gallery Cards */
+        .gallery-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 45px -10px rgba(212, 175, 55, 0.15);
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-card:hover .card-img {
+            transform: scale(1.08);
+        }
+
+        /* Hover Overlay Pane */
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(11, 12, 16, 0.95) 0%, rgba(11, 12, 16, 0.4) 60%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 2px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tag-color {
+            border-color: rgba(212, 175, 55, 0.4);
+            color: #d4af37;
+        }
+
+        .card-prompt {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+
+        .btn-view {
+            align-self: flex-start;
+            background: transparent;
+            border: 1px solid var(--text-primary);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-view:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: none;
+            animation: slideUp 0.3s ease-out forwards;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(1.05); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes cardAppear {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardAppearDelay {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">
+                <span class="logo-dot"></span> NailGen AI
+            </div>
+            <div class="badge" id="engine-badge">Free Engine</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Create Beautiful Nail Designs with AI</h1>
+            <p>Select your colors, style, and length. Let the AI generate bespoke luxury nail art in seconds.</p>
+            
+            <div class="app-grid">
+                <!-- Control Panel Panel -->
+                <div class="panel">
+                    <form id="generator-form">
+                        <div class="form-group">
+                            <label for="input-color">Nail Color / Details</label>
+                            <input type="text" id="input-color" class="form-control" placeholder="e.g. pastel pink, matte black, gold flakes" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="select-occasion">Occasion</label>
+                            <select id="select-occasion" class="form-control" required>
+                                <option value="Daily">Daily</option>
+                                <option value="Wedding">Wedding</option>
+                                <option value="Party">Party</option>
+                                <option value="Birthday">Birthday</option>
+                                <option value="Office">Office</option>
+                                <option value="Date">Date</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="select-style">Style</label>
+                            <select id="select-style" class="form-control" required>
+                                <option value="Elegant">Elegant</option>
+                                <option value="Minimalist">Minimalist</option>
+                                <option value="Bold">Bold</option>
+                                <option value="Glamorous">Glamorous</option>
+                                <option value="Cute">Cute</option>
+                                <option value="Classic">Classic</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="select-length">Length</label>
+                            <select id="select-length" class="form-control" required>
+                                <option value="Medium">Medium</option>
+                                <option value="Short">Short</option>
+                                <option value="Long">Long</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" id="btn-submit" class="btn-generate">
+                            Generate Design
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="panel preview-container" id="preview-box">
+                    <!-- Empty State -->
+                    <div class="empty-state" id="empty-state-view">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p>Configure options and hit generate.</p>
+                        <span style="font-size: 13px; color: var(--text-secondary);">Your masterpiece will load here.</span>
+                    </div>
+
+                    <!-- Loader -->
+                    <div class="loader-wrapper" id="loader-view">
+                        <div class="spinner"></div>
+                        <div class="loader-text">Painting your canvas...</div>
+                    </div>
+
+                    <!-- Output Image -->
+                    <img id="result-img" class="preview-image" src="" alt="Generated Nail Art">
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section">
+            <div class="gallery-title">
+                Designs Registry
+                <span class="badge" id="designs-count" style="font-size: 14px;">0 designs</span>
+            </div>
+            
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Gallery items injected here -->
+            </div>
+        </section>
+    </main>
+
+    <div class="toast" id="error-toast">Error generating image. Try again.</div>
+
+    <script>
+        const form = document.getElementById('generator-form');
+        const btnSubmit = document.getElementById('btn-submit');
+        const previewBox = document.getElementById('preview-box');
+        const emptyState = document.getElementById('empty-state-view');
+        const loaderView = document.getElementById('loader-view');
+        const resultImg = document.getElementById('result-img');
+        const galleryContainer = document.getElementById('gallery-container');
+        const countBadge = document.getElementById('designs-count');
+        const toast = document.getElementById('error-toast');
+
+        // Initial Load: Fetch Gallery
+        loadGallery();
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const color = document.getElementById('input-color').value;
+            const occasion = document.getElementById('select-occasion').value;
+            const style = document.getElementById('select-style').value;
+            const length = document.getElementById('select-length').value;
+
+            // Set loading state
+            btnSubmit.disabled = true;
+            emptyState.style.display = 'none';
+            resultImg.style.display = 'none';
+            loaderView.style.display = 'flex';
+            previewBox.style.borderStyle = 'solid';
+            previewBox.style.borderColor = 'rgba(212, 175, 55, 0.4)';
+
+            try {
+                const response = await fetch('/api/ai/generate-nail-design', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ color, occasion, style, length })
+                });
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                const data = await response.json();
+                
+                // Show Image
+                resultImg.src = data.imageUrl;
+                resultImg.style.display = 'block';
+                loaderView.style.display = 'none';
+                
+                // Reload gallery to show the new design
+                loadGallery();
+
+            } catch (err) {
+                console.error(err);
+                showToast(err.message || 'Generation failed. Please try again.');
+                loaderView.style.display = 'none';
+                emptyState.style.display = 'flex';
+                previewBox.style.borderStyle = 'dashed';
+                previewBox.style.borderColor = 'var(--glass-border)';
+            } finally {
+                btnSubmit.disabled = false;
+            }
+        });
+
+        async function loadGallery() {
+            try {
+                const response = await fetch('/api/ai/gallery');
+                if (!response.ok) return;
+                const items = await response.json();
+                
+                // Update badge count
+                countBadge.textContent = `${items.length} design${items.length === 1 ? '' : 's'}`;
+
+                // Clear
+                galleryContainer.innerHTML = '';
+
+                if (items.length === 0) {
+                    galleryContainer.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">
+                            No designs generated yet. Be the first to generate one!
+                        </div>
+                    `;
+                    return;
+                }
+
+                items.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'gallery-card';
+                    card.style.animationDelay = `${index * 0.05}s`;
+                    card.innerHTML = `
+                        <div class="card-img-wrapper">
+                            <img class="card-img" src="${item.imageUrl}" alt="${item.designName}" loading="lazy">
+                            <div class="card-overlay">
+                                <div class="card-title">${item.designName}</div>
+                                <div class="card-tags">
+                                    <span class="tag tag-color">${item.color}</span>
+                                    <span class="tag">${item.length}</span>
+                                    <span class="tag">${item.style}</span>
+                                    <span class="tag">${item.occasion}</span>
+                                </div>
+                                <div class="card-prompt">${item.prompt}</div>
+                                <a class="btn-view" href="${item.imageUrl}" target="_blank">View Design</a>
+                            </div>
+                        </div>
+                    `;
+                    galleryContainer.appendChild(card);
+                });
+            } catch (err) {
+                console.error('Failed to load gallery', err);
+            }
+        }
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

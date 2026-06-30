@@ -1,0 +1,24 @@
+[
+  {
+    "id": "a63eb496-4435-4690-9d7d-782196bf34ab",
+    "prompt": "Professional nail art photography, close-up shot of beautiful medium length nails, pastel pink color scheme, elegant style design, perfect for wedding occasion, luxury salon quality, soft studio lighting, nails on white background, photorealistic, 4K quality, highly detailed",
+    "color": "pastel pink",
+    "occasion": "wedding",
+    "style": "elegant",
+    "length": "medium",
+    "imageUrl": "http://127.0.0.1:8000/static/images/a63eb496-4435-4690-9d7d-782196bf34ab.png",
+    "designName": "Pastel Pink Bridal Elegance",
+    "timestamp": "2026-06-30T16:12:51.232442"
+  },
+  {
+    "id": "cdc3f0cd-b16e-4642-9891-9761988ab18e",
+    "prompt": "Professional nail art photography, close-up shot of beautiful Short length nails, Yellow color scheme, Bold style design, perfect for Birthday occasion, luxury salon quality, soft studio lighting, nails on white background, photorealistic, 4K quality, highly detailed",
+    "color": "Yellow",
+    "occasion": "Birthday",
+    "style": "Bold",
+    "length": "Short",
+    "imageUrl": "http://127.0.0.1:8000/static/images/cdc3f0cd-b16e-4642-9891-9761988ab18e.png",
+    "designName": "Yellow Celebration Statement",
+    "timestamp": "2026-06-30T16:15:58.521612"
+  }
+]
