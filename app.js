@@ -1,19 +1,13 @@
 const express = require('express');
-const app = express();
+const cors = require('cors');
 const aiRoutes = require('./routes/aiRoutes');
+
+const app = express();
+app.use(cors());
 app.use(express.json());
 
-
+// Celine AI Endpoints
 app.use('/api/ai', aiRoutes);
 
-app.get('/', (req, res) => {
-    res.send('Celine AI Assistant Server is Running!');
-});
-
 const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Server is live on port ${PORT}`);
-});
-process.on('unhandledRejection', (reason, promise) => {
-    console.log('Unhandled Rejection at:', promise, 'reason:', reason);
-});
+app.listen(PORT, () => console.log(`🚀 Server live on port ${PORT}`));
